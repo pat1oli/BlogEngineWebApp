@@ -9,6 +9,6 @@ namespace BlogEngineWebApp.Models
         public int CategoryId { get; set; }
         public string Title { get; set; }
 
-        public List<Post> Posts { get; set; }
+        public ICollection<Post> Posts { get; set; }
     }
 }

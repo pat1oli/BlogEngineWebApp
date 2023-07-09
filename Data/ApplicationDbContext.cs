@@ -1,7 +1,7 @@
 ﻿using BlogEngineWebApp.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace BlogEngineWebApp.Repository
+namespace BlogEngineWebApp.Data
 {
     public class ApplicationDbContext : DbContext
     {
