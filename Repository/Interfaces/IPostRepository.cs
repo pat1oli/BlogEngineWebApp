@@ -1,4 +1,5 @@
 ﻿using BlogEngineWebApp.Models;
+using System.Collections.ObjectModel;
 
 namespace BlogEngineWebApp.Repository.Interfaces
 {
@@ -7,7 +8,9 @@ namespace BlogEngineWebApp.Repository.Interfaces
         bool CreatePost(Post post);
         bool UpdatePost(int postId, Post post);
 
-        ICollection<Post> GetPosts { get; }
+        bool PostExists(int postId);
+
+        ICollection<Post> GetPosts();
         Post GetPostById(int postId);
     }
 }

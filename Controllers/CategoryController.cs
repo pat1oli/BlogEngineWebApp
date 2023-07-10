@@ -1,5 +1,6 @@
-﻿using BlogEngineWebApp.Models;
-using BlogEngineWebApp.Repository;
+﻿using AutoMapper;
+using BlogEngineWebApp.Dto;
+using BlogEngineWebApp.Models;
 using BlogEngineWebApp.Repository.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,9 +12,11 @@ namespace BlogEngineWebApp.Controllers
     public class CategoryController : Controller
     {
         private readonly ICategoryRepository _categoryRepository;
-        public CategoryController(ICategoryRepository categoryRepository)
+        private readonly IMapper _mapper;
+        public CategoryController(ICategoryRepository categoryRepository, IMapper mapper)
         {
             _categoryRepository = categoryRepository;
+            _mapper = mapper;
         }
         
         [HttpPost]
@@ -39,7 +42,7 @@ namespace BlogEngineWebApp.Controllers
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
         public IActionResult GetCategories() { 
-            var categories = _categoryRepository.GetCategories();
+            var categories = _mapper.Map<List<CategoryDto>>(_categoryRepository.GetCategories());
             if(!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -61,7 +64,7 @@ namespace BlogEngineWebApp.Controllers
             {
                 return NotFound();
             }
-            var category = _categoryRepository.GetCategoryById(id);
+            var category = _mapper.Map <CategoryDto>(_categoryRepository.GetCategoryById(id));
             return Ok(category);
         }
 
@@ -76,7 +79,8 @@ namespace BlogEngineWebApp.Controllers
             {
                 return NotFound();
             }
-            var posts = _categoryRepository.GetPostsByCategoryId(id);
+            var posts = _mapper.Map<List<PostDto>>(_categoryRepository.GetPostsByCategoryId(id));
+
             if (posts == null || posts.Count ==0)
                 return NoContent();
 
