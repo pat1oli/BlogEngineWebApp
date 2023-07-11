@@ -1,7 +1,9 @@
 using BlogEngineWebApp.Data;
+using BlogEngineWebApp.Helper;
 using BlogEngineWebApp.Repository;
 using BlogEngineWebApp.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,18 +12,20 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen( c =>
 {
-    c.SwaggerDoc("v1",
-        new() { Title="Blog Engine API", Version= "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo 
+    { Title="Blog Engine API", Version= "v1" });
 });
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 });
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IPostRepository, PostRepository>();
+builder.Services.AddScoped<UniqueTitleAttribute>();
 
 var app = builder.Build();
 

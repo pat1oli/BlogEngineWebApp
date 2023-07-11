@@ -14,34 +14,36 @@ namespace BlogEngineWebApp.Repository
         }
         public bool CreateCategory(Category category)
         {
-            try
-            {
-                _context.Add(category);
-                _context.SaveChanges();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }           
+            _context.Add(category);
+             return Save(); 
         }
-        public bool UpdateCategory(int categoryId, Category category)
+
+        public bool UpdateCategory(Category category)
         {
-            try
-            {
-                _context.Update(category);
-                _context.SaveChanges();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
+            _context.Update(category);
+            return Save();
         }
+
         public ICollection<Category> GetCategories()
         {
             return _context.Categories.ToList();
         }
+
+        public bool Save()
+        {
+            int isSaved = 0;
+            try
+            {
+                isSaved = _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                return isSaved > 0;
+            }
+           
+           return isSaved > 0;
+        }
+
         public bool CategoryExists(int categoryId)
         {
             return _context.Categories.Any(c => c.CategoryId == categoryId);
@@ -51,10 +53,14 @@ namespace BlogEngineWebApp.Repository
             return _context.Categories.Where( c => c.CategoryId == categoryId).First();
         }
 
-        //TO DO: Move this method 
         public ICollection<Post> GetPostsByCategoryId(int categoryId)
         {
             return _context.Posts.Where(c => c.CategoryId == categoryId).ToList();
+        }
+
+        public int IsUniqueTitle(string title)
+        {
+            return GetCategories().Count(c => c.Title.Trim().ToLower() == title.Trim().ToLower());
         }
 
     }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BlogEngineWebApp.Dto;
+using BlogEngineWebApp.Models;
 using BlogEngineWebApp.Repository;
 using BlogEngineWebApp.Repository.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +22,7 @@ namespace BlogEngineWebApp.Controllers
 
 
         [HttpGet]
-        [ProducesResponseType(typeof(PostDto), 200)]
+        [ProducesResponseType(typeof(IEnumerable<Post>), 200)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
         public IActionResult GetPosts()
@@ -36,7 +37,7 @@ namespace BlogEngineWebApp.Controllers
         }
 
         [HttpGet("/postId")]
-        [ProducesResponseType(typeof(PostDto), 200)]
+        [ProducesResponseType(typeof(Post), 200)]
         [ProducesResponseType(404)]
         public IActionResult GetPostById(int id)
         {

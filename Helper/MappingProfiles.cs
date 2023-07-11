@@ -9,7 +9,9 @@ namespace BlogEngineWebApp.Helper
         public MappingProfiles()
         {
             CreateMap<Category, CategoryDto>();
+            CreateMap<CategoryDto, Category>();
             CreateMap<Post, PostDto>();
+            CreateMap<PostDto, Post>();
         }
     }
 }
