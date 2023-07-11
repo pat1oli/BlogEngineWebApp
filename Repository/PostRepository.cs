@@ -15,11 +15,13 @@ namespace BlogEngineWebApp.Repository
         }
         public bool CreatePost(Post post)
         {
-            throw new NotImplementedException();
+             _context.Add(post);
+            return Save();
         }
-        public bool UpdatePost(int postId, Post post)
+        public bool UpdatePost(Post post)
         {
-            throw new NotImplementedException();
+            _context.Update(post);
+            return Save();
         }
 
         public bool PostExists(int postId) {
@@ -34,6 +36,26 @@ namespace BlogEngineWebApp.Repository
         public ICollection<Post> GetPosts()
         {
             return _context.Posts.Where(p => p.PublicationDate <= DateTime.Now).OrderByDescending(p => p.PublicationDate).ToList();
+        }
+
+        public int IsUniqueTitle(string title)
+        {
+            return GetPosts().Count(x => x.Title.Trim().ToLower() == title.Trim().ToLower());
+        }
+
+        public bool Save()
+        {
+            int isSaved = 0;
+            try
+            {
+                isSaved = _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                return isSaved > 0;
+            }
+
+            return isSaved > 0;
         }
     }
 }

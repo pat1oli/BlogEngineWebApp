@@ -38,7 +38,7 @@ namespace BlogEngineWebApp.Controllers
             if (isNotUnique)
             {
                 ModelState.AddModelError("", "Category already exists!");
-                return StatusCode(404, ModelState);
+                return NotFound(ModelState);
             }
            
             var categoryMap = _mapper.Map<Category>(categoryDto);
@@ -58,18 +58,14 @@ namespace BlogEngineWebApp.Controllers
         [SwaggerOperation(summary: "Update category", description: "Update a title and return a status")]
         public IActionResult Update([FromBody] CategoryDto categoryDto)
         {
-            if (categoryDto == null)
-            {
-                return BadRequest("Can not be empty");
-            }
             bool exists = _categoryRepository.CategoryExists(categoryDto.CategoryId);
             if(!exists) 
             {
-                return BadRequest("How dare you");
+                return BadRequest("Action unauthorized - Post doesnt exist");
             }
 
-            bool moreTitle = _categoryRepository.IsUniqueTitle(categoryDto.Title) >= 2;
-            if (moreTitle)
+            bool IsNotUnique = _categoryRepository.IsUniqueTitle(categoryDto.Title) >= 2;
+            if (IsNotUnique)
             {
                 return BadRequest("Title already exists");
             }
@@ -77,7 +73,7 @@ namespace BlogEngineWebApp.Controllers
             var category = _mapper.Map<Category>(categoryDto);
             if (!_categoryRepository.UpdateCategory(category))
             {
-                return BadRequest("Database shut down");
+                return BadRequest();
             }          
 
             return Ok(category);
@@ -91,16 +87,18 @@ namespace BlogEngineWebApp.Controllers
         [SwaggerOperation(summary: "Get categories", description: "Return a list of categories")]
         public IActionResult GetCategories() { 
             var categories = _categoryRepository.GetCategories();
-            var categoriesDto = _mapper.Map<List<CategoryDto>>(categories);
-            if(!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            if(categoriesDto.IsNullOrEmpty())
+            if (categories.IsNullOrEmpty())
             {
                 return NoContent();
             }
-            return Ok(categories);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var categoriesDto = _mapper.Map<List<CategoryDto>>(categories);
+
+            
+            return Ok(categoriesDto);
         }
 
         [HttpGet("categoryId")]
@@ -124,7 +122,6 @@ namespace BlogEngineWebApp.Controllers
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
         [SwaggerOperation(summary: "Get posts with by categoryID", description: "Return all the posts of category [id]")]
-
         public IActionResult GetPostByCategoryId(int id)
         {
             bool existsCategory = _categoryRepository.CategoryExists(id);
@@ -132,10 +129,14 @@ namespace BlogEngineWebApp.Controllers
             {
                 return NotFound();
             }
-            var posts = _mapper.Map<List<PostDto>>(_categoryRepository.GetPostsByCategoryId(id));
+            var posts = _categoryRepository.GetPostsByCategoryId(id);
+            var postsDto = _mapper.Map<List<PostDto>>(posts);
 
-            if (posts == null || posts.Count ==0)
+            if (postsDto == null || postsDto.Count == 0)
+            {
                 return NoContent();
+            }
+                
 
             return Ok(posts);
         }
