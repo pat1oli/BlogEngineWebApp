@@ -1,9 +1,11 @@
 ﻿using BlogEngineWebApp.Data;
 using BlogEngineWebApp.Helper;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
 namespace BlogEngineWebApp.Models
 {
+    [Index(nameof(Category.Title), IsUnique = true)]
     public class Category
     {
         [Key]
@@ -11,6 +13,7 @@ namespace BlogEngineWebApp.Models
         
         [Required]
         [UniqueTitle]
+        
         public string Title { get; set; }
 
         public ICollection<Post> Posts { get; set; }

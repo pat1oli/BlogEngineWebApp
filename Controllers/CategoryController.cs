@@ -98,7 +98,7 @@ namespace BlogEngineWebApp.Controllers
             var categoriesDto = _mapper.Map<List<CategoryDto>>(categories);
 
             
-            return Ok(categoriesDto);
+            return View("Categories", categoriesDto);
         }
 
         [HttpGet("categoryId")]

@@ -78,7 +78,7 @@ namespace BlogEngineWebApp.Controllers
             if (posts == null || posts.Count == 0)
                 return NoContent();
 
-            return Ok(posts);
+            return View("Posts", posts);
         }
 
         [HttpGet("/postId")]
