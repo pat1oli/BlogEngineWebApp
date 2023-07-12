@@ -25,6 +25,7 @@ namespace BlogEngineWebApp.Controllers
 
         public IActionResult Index()
         {
+            _logger.LogInformation("Loading categories and posts data");
             var categoryController = new CategoryController(_categoryRepository, _mapper);
             var categoryViewResult = (ViewResult)categoryController.GetCategories();
 

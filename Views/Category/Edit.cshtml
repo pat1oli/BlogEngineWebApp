@@ -1,0 +1,14 @@
+﻿@model CategoryDto
+@{
+    ViewData["Title"] = "Blog - Edit Category";
+}
+<p>Edit Category</p>
+<form>
+    <div class="form-group row">
+        <label class="col-md-2">Title</label>
+        <div class="col-md-6">
+            <input type="text" placeholder="@Model.Title" autofocus />
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>

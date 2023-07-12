@@ -9,9 +9,6 @@
     <link rel="stylesheet" href="~/BlogEngineWebApp.styles.css" asp-append-version="true" />
 </head>
 <body>
-    <header>
-        @Html.Partial("_NavBar")
-    </header>
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -20,7 +17,8 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2023 - BlogEngineWebApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2023 - BlogEngineWebApp - <a asp-area="" asp-controller="Category" asp-action="GetCategories">Categories</a>
+            - <a asp-area="" asp-controller="Post" asp-action="GetPosts">Posts</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

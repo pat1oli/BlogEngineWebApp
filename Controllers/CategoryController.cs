@@ -8,9 +8,6 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace BlogEngineWebApp.Controllers
 {
-
-    [Route("/categories")]
-    [ApiController]
     [Produces("application/json")]
     [SwaggerTag("Category", "Endpoints for category")]
     public class CategoryController : Controller
@@ -23,11 +20,17 @@ namespace BlogEngineWebApp.Controllers
             _mapper = mapper;
         }
 
+        [HttpGet]
+        public IActionResult Add()
+        {
+            return View("Create");
+        }
+
         [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [SwaggerOperation(summary: "Add category", description: "Add a new category")]
-        public IActionResult Add([FromBody] CategoryDto categoryDto)
+        public IActionResult Add(CategoryDto categoryDto)
         {
             if (categoryDto == null)
             {
@@ -48,7 +51,7 @@ namespace BlogEngineWebApp.Controllers
                 return StatusCode(500, ModelState);
             }
 
-            return Ok("Successfully created");
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpPut]
@@ -76,11 +79,12 @@ namespace BlogEngineWebApp.Controllers
                 return BadRequest();
             }          
 
-            return Ok(category);
+            return View("Edit", category);
         }
 
 
         [HttpGet]
+        [Route("/categories")]
         [ProducesResponseType(typeof(IEnumerable<CategoryDto>), 200)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
@@ -101,35 +105,36 @@ namespace BlogEngineWebApp.Controllers
             return View("Categories", categoriesDto);
         }
 
-        [HttpGet("categoryId")]
+        [HttpGet]
+        [Route("/categories/{categoryId}")]
         [ProducesResponseType(typeof(CategoryDto), 200)]
         [ProducesResponseType(404)]
         [SwaggerOperation(summary: "Get category with ID", description: "Return the category with [id]")]
-        public IActionResult GetCategoryById(int id)
+        public IActionResult GetCategoryById(int categoryId)
         {
-            bool existsCategory = _categoryRepository.CategoryExists(id);
+            bool existsCategory = _categoryRepository.CategoryExists(categoryId);
             if (!existsCategory)
             {
                 return NotFound();
             }
-            var category = _categoryRepository.GetCategoryById(id);
+            var category = _categoryRepository.GetCategoryById(categoryId);
             var categoryDto = _mapper.Map <CategoryDto>(category);
             return Ok(categoryDto);
         }
 
-        [HttpGet("categoryId/posts")]
+        [HttpGet("/categories/{categoryId}/posts")]
         [ProducesResponseType(typeof(IEnumerable<Post>), 200)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
         [SwaggerOperation(summary: "Get posts with by categoryID", description: "Return all the posts of category [id]")]
-        public IActionResult GetPostByCategoryId(int id)
+        public IActionResult GetPostByCategoryId(int categoryId)
         {
-            bool existsCategory = _categoryRepository.CategoryExists(id);
+            bool existsCategory = _categoryRepository.CategoryExists(categoryId);
             if (!existsCategory)
             {
                 return NotFound();
             }
-            var posts = _categoryRepository.GetPostsByCategoryId(id);
+            var posts = _categoryRepository.GetPostsByCategoryId(categoryId);
             var postsDto = _mapper.Map<List<PostDto>>(posts);
 
             if (postsDto == null || postsDto.Count == 0)

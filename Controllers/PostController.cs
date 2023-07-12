@@ -62,7 +62,7 @@ namespace BlogEngineWebApp.Controllers
                 return BadRequest();
             }
 
-            return Ok(postDto);
+            return View("Edit", postDto);
         }
 
 

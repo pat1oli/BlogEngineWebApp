@@ -1,7 +1,8 @@
-﻿@model IEnumerable<BlogEngineWebApp.Dto.PostDto>
+﻿@model IEnumerable<PostDto>
 @{
     ViewData["Title"] = "List of Posts";
 }
+<br />
 <div>
     <div class="row">
         <div class="col-md-6">
@@ -31,3 +32,42 @@
     </div>
 </div>
 
+
+<h2>Add Post</h2>
+<form>
+    <div class="form-group row">
+        <label for="inputPostTitle" class="col-md-2">Title</label>
+        <div class="col-md-6">
+            <input id="inputPostTitle" type="text" class="form-control" placeholder="Title" required/>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="inputCategory" class="col-md-2">Category</label>
+        <div class="col-md-6">
+            <select id="inputCategory" class="form-control" required>
+                @foreach (var category in Model)
+                {
+                    <option>@category.Title</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="inputPostDate" class="col-md-2">Publication Date</label>
+        <div class="col-md-6">
+            <input id="inputPostDate" type="date" value="2023-01-01" min="1990-01-01" max="2100-01-01" class="form-control" required />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="inputContent">Content</label>
+        <textarea id="inputContent" class="form-control col-md-8" rows="4" required>
+        </textarea>
+    </div>
+
+
+
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
