@@ -1,4 +1,5 @@
-﻿using BlogEngineWebApp.Models;
+﻿using BlogEngineWebApp.Helper;
+using BlogEngineWebApp.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace BlogEngineWebApp.Dto
@@ -9,12 +10,13 @@ namespace BlogEngineWebApp.Dto
 
         [Display(Name = "Post title")]
         [Required(ErrorMessage = "Title is required")]
+        [PostUniqueTitle]
         public string Title { get; set; }
         [Display(Name = "Post content")]
         [Required(ErrorMessage = "Content is required")]
         public string Content { get; set; }
         [Display(Name = "Post publication date")]
-        [Required(ErrorMessage = "Publication date is required")]
+        [DataType(DataType.DateTime, ErrorMessage = "Publication date is not valid")]
         public DateTime PublicationDate { get; set; }
 
         [Display(Name = "Post category")]

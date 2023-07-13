@@ -33,14 +33,15 @@ namespace BlogEngineWebApp.Controllers
         [ProducesResponseType(typeof(PostDto), 200)]
         public IActionResult Add(PostDto postDto)
         {
+            List<Category> categories = _categoryRepository.GetCategories().ToList();
+            ViewBag.CategoriesEnum = new SelectList(categories, "CategoryId", "Title");
+            if (!ModelState.IsValid)
+            {
+                return View("Create", postDto);
+            }
             if (postDto == null)
             {
                 return View("NotFound");
-            }
-            bool isNotUnique = _postRepository.IsUniqueTitle(postDto.Title) >= 1;
-            if (isNotUnique)
-            {
-                return BadRequest("Title must be unique");
             }
             var post = _mapper.Map<Post>(postDto);
             if (!_postRepository.CreatePost(post))

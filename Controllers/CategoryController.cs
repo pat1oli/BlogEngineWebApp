@@ -34,7 +34,7 @@ namespace BlogEngineWebApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View("NotFound",categoryDto);
+                return View("Create", categoryDto);
             }
 
             bool isNotUnique = _categoryRepository.IsUniqueTitle(categoryDto.Title) > 0;
@@ -75,6 +75,10 @@ namespace BlogEngineWebApp.Controllers
         [SwaggerOperation(summary: "Update category", description: "Update a title and return a status")]
         public IActionResult Update(int categoryId, CategoryDto categoryDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return View("Edit", categoryDto);
+            }
             bool IsNotUnique = _categoryRepository.IsUniqueTitle(categoryDto.Title) > 1;
             if (IsNotUnique)
             {

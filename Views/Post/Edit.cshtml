@@ -9,6 +9,7 @@
         <label class="col-md-2">Title</label>
         <div class="col-md-6">
             <input asp-for="Title" type="text" class="form-control" placeholder="Title" required autofocus />
+            <span asp-validation-for="Title" class="text-danger"></span>
         </div>
     </div>
 
@@ -25,6 +26,7 @@
         <label for="inputPostDate" class="col-md-2">Publication Date</label>
         <div class="col-md-6">
             <input asp-for="PublicationDate" id="inputPostDate" type="date"  min="1990-01-01" max="2100-01-01" class="form-control" required />
+            <span asp-validation-for="PublicationDate" class="text-danger"></span>
         </div>
     </div>
 
@@ -32,6 +34,7 @@
         <label for="inputContent">Content</label>
         <textarea asp-for="Content" id="inputContent" class="form-control col-md-8" required>
         </textarea>
+        <span asp-validation-for="Content" class="text-danger"></span>
     </div>
 
     <button type="submit" class="btn btn-primary">Save</button>
