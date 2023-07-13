@@ -11,8 +11,7 @@ namespace BlogEngineWebApp.Models
         [Key]
         public int CategoryId { get; set; }
         
-        [Required]
-        [UniqueTitle]
+        [Required (ErrorMessage = "Category Title is required")]
         
         public string Title { get; set; }
 

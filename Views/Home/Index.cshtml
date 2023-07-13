@@ -57,7 +57,7 @@
                 <h2>Posts</h2>
             </div>
             <div class="col-md-2">
-                <button type="button" class="btn btn-primary">Add</button>
+                <a asp-controller="Post" asp-action="Add" class="btn btn-success">Add</a>
             </div>
         </div>
 
@@ -72,7 +72,7 @@
                     <ul class="list-group">
                         @foreach (var post in posts)
                         {
-                            <li class="list-group-item"> <a>  @post.Title </a> </li>
+                            <li class="list-group-item"> <a asp-controller="Post" asp-route-postId="@post.PostId" asp-action="Update">  @post.Title </a> </li>
                         }
                     </ul>
                 }
