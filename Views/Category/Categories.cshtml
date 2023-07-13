@@ -1,0 +1,33 @@
+﻿@model IEnumerable<CategoryDto>
+@{
+    ViewData["Title"] = "Categories";
+}
+<br />
+<div>
+    <div class="row">
+        <div class="col-md-6">
+            <h2>Categories</h2>
+        </div>
+        <div class="col-md-2">
+            <button type="button" class="btn btn-primary">Add</button>
+        </div>
+    </div>
+   
+    <div class="row">
+        <div class="col-md-6">
+            @if (Model.Count() == 0)
+            {
+                <p> No category added. Add a new one.</p>
+            }
+            else
+            {
+                <ul class="list-group">
+                    @foreach (var category in Model)
+                    {
+                        <li class="list-group-item"> <a>  @category.Title </a> </li>
+                    }
+                </ul>
+            }
+        </div> 
+    </div>
+</div>

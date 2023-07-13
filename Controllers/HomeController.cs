@@ -1,5 +1,11 @@
-﻿using BlogEngineWebApp.Models;
+﻿using AutoMapper;
+using BlogEngineWebApp.Data;
+using BlogEngineWebApp.Dto;
+using BlogEngineWebApp.Models;
+using BlogEngineWebApp.Repository.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.IdentityModel.Tokens;
 using System.Diagnostics;
 
 namespace BlogEngineWebApp.Controllers
@@ -7,20 +13,27 @@ namespace BlogEngineWebApp.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IMapper _mapper;
+        private readonly ApplicationDbContext _appDbContext;
 
-        public HomeController(ILogger<HomeController> logger)
+
+        public HomeController(ILogger<HomeController> logger, IMapper mapper
+            , ApplicationDbContext applicationDbContext)
         {
             _logger = logger;
+            _mapper = mapper;
+            _appDbContext = applicationDbContext;
         }
 
         public IActionResult Index()
         {
-            return View();
-        }
+            _logger.LogInformation("Loading categories and posts data");
 
-        public IActionResult Privacy()
-        {
-            return View();
+            var categoryResult = _mapper.Map<List<CategoryDto>>(_appDbContext.Categories.OrderBy(c => c.Title).ToList());
+            var postResult = _mapper.Map<List<PostDto>>(_appDbContext.Posts.OrderBy(p => p.Title).ToList());
+            
+            List<object> data = new List<object>() { categoryResult, postResult};
+            return View(data);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

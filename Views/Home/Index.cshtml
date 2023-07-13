@@ -1,8 +1,82 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@model List<object>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@{
+    List<BlogEngineWebApp.Dto.CategoryDto> categories = new List<BlogEngineWebApp.Dto.CategoryDto>();
+    List<BlogEngineWebApp.Dto.PostDto> posts = new List<BlogEngineWebApp.Dto.PostDto>();
+    foreach (var item in Model)
+    {
+        if (item is List <BlogEngineWebApp.Dto.CategoryDto>)
+        {
+            categories = (List<BlogEngineWebApp.Dto.CategoryDto>)item;
+        }
+        else
+        {
+            posts = (List<BlogEngineWebApp.Dto.PostDto>)item;
+        }
+
+    } 
+}
+<div>
+    <br />
+    @*Category List*@
+    <div>
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Categories</h2>
+            </div>
+            <div class="col-md-2">
+                <a asp-controller="Category" asp-action="Add" class="btn btn-success">Add</a>
+            </div>
+        </div>
+       
+        <div class="row">
+            <div class="col-md-6">
+                @if (categories.Count() == 0)
+                {
+                    <p> No category added. Add a new one.</p>
+                }
+                else
+                {
+                    <ul class="list-group">
+                        @foreach (var category in @categories)
+                        {
+                            <li class="list-group-item"> <a class="no-underline" asp-controller="Category" asp-route-categoryId="@category.CategoryId" asp-action="Update"> @category.Title</a> </li>
+                        }
+                    </ul>
+                }
+            </div>
+        </div>
+    </div>
+    <br />
+    <br />
+    @*Post list*@
+    <div>
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Posts</h2>
+            </div>
+            <div class="col-md-2">
+                <a asp-controller="Post" asp-action="Add" class="btn btn-success">Add</a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                @if (posts.Count() == 0)
+                {
+                    <p> No Post added. Add a new one.</p>
+                }
+                else
+                {
+                    <ul class="list-group">
+                        @foreach (var post in posts)
+                        {
+                            <li class="list-group-item"> <a class="no-underline" asp-controller="Post" asp-route-postId="@post.PostId" asp-action="Update">  @post.Title </a> </li>
+                        }
+                    </ul>
+                }
+            </div>
+        </div>
+    </div>
 </div>
+
