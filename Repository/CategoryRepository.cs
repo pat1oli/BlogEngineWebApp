@@ -50,7 +50,7 @@ namespace BlogEngineWebApp.Repository
         }
         public Category GetCategoryById(int categoryId)
         {
-            return _context.Categories.Where( c => c.CategoryId == categoryId).First();
+            return _context.Categories.Where( c => c.CategoryId == categoryId).FirstOrDefault();
         }
 
         public ICollection<Post> GetPostsByCategoryId(int categoryId)
