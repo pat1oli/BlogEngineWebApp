@@ -95,7 +95,6 @@ namespace BlogEngineWebApp.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-
         [HttpGet]
         [Route("/categories")]
         [ProducesResponseType(typeof(IEnumerable<CategoryDto>), 200)]
@@ -113,9 +112,8 @@ namespace BlogEngineWebApp.Controllers
                 return BadRequest(ModelState);
             }
             var categoriesDto = _mapper.Map<List<CategoryDto>>(categories);
-
-            
-            return View("Categories", categoriesDto);
+           
+            return Ok(categoriesDto);
         }
 
         [HttpGet]
@@ -154,9 +152,7 @@ namespace BlogEngineWebApp.Controllers
             {
                 ModelState.AddModelError("Error", "No Post with this Category!");
                 return NoContent();
-            }
-                
-
+            }               
             return Ok(posts);
         }
     }

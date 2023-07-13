@@ -4,7 +4,6 @@ using BlogEngineWebApp.Models;
 using BlogEngineWebApp.Repository.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 
 namespace BlogEngineWebApp.Controllers
 {
@@ -104,7 +103,7 @@ namespace BlogEngineWebApp.Controllers
             if (posts == null || posts.Count == 0)
                 return NoContent();
 
-            return View("Posts", posts);
+            return Ok(posts);
         }
 
         [HttpGet("/posts/{postId}")]

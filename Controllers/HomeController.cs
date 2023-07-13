@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
+using BlogEngineWebApp.Data;
+using BlogEngineWebApp.Dto;
 using BlogEngineWebApp.Models;
 using BlogEngineWebApp.Repository.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.IdentityModel.Tokens;
 using System.Diagnostics;
 
 namespace BlogEngineWebApp.Controllers
@@ -10,33 +13,26 @@ namespace BlogEngineWebApp.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly ICategoryRepository _categoryRepository;
-        private readonly IPostRepository _postRepository;
         private readonly IMapper _mapper;
+        private readonly ApplicationDbContext _appDbContext;
 
 
-        public HomeController(ILogger<HomeController> logger, ICategoryRepository categoryRepository
-            , IPostRepository postRepository, IMapper mapper)
+        public HomeController(ILogger<HomeController> logger, IMapper mapper
+            , ApplicationDbContext applicationDbContext)
         {
             _logger = logger;
-            _categoryRepository = categoryRepository;
-            _postRepository = postRepository;
             _mapper = mapper;
+            _appDbContext = applicationDbContext;
         }
 
         public IActionResult Index()
         {
             _logger.LogInformation("Loading categories and posts data");
-            var categoryController = new CategoryController(_categoryRepository, _mapper);
-            var categoryViewResult = (ViewResult)categoryController.GetCategories();
 
-            var postController = new PostController(_postRepository, _mapper, _categoryRepository);
-            var postViewResult = (ViewResult)postController.GetPosts();
-
-            var listPost = postViewResult.ViewData.Model;
-            var listCategory = categoryViewResult.ViewData.Model;
-
-            var data = new List<object>() { listCategory, listPost};
+            var categoryResult = _mapper.Map<List<CategoryDto>>(_appDbContext.Categories.ToList());
+            var postResult = _mapper.Map<List<PostDto>>(_appDbContext.Posts.ToList());
+            
+            List<object> data = new List<object>() { categoryResult, postResult};
             return View(data);
         }
 
