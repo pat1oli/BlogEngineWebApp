@@ -1,13 +1,14 @@
 ﻿@model CategoryDto
 @{
-    ViewData["Title"] = "Blog - Edit Category";
+    ViewData["Title"] = "Blog - Update Category";
 }
+@Html.HiddenFor(model => model.CategoryId)
 <p>Edit Category</p>
-<form>
+<form method="post" asp-action="Update" enctype="multipart/form-data">
     <div class="form-group row">
         <label class="col-md-2">Title</label>
         <div class="col-md-6">
-            <input type="text" placeholder="@Model.Title" autofocus />
+            <input asp-for="Title" type="text" placeholder="@Model.Title" autofocus />
         </div>
     </div>
     <button type="submit" class="btn btn-primary">Save</button>

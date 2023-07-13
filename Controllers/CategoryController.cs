@@ -54,32 +54,45 @@ namespace BlogEngineWebApp.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        [HttpPut]
+        [HttpGet]
+        [Route("category/update/{categoryId}")]
+        public IActionResult Update(int categoryId)
+        {
+            var category = _categoryRepository.GetCategoryById(categoryId);
+            if (category == null)
+            {
+                return View("NotFound");
+            }
+            var categoryDto = _mapper.Map<CategoryDto>(category);
+            return View("Edit", categoryDto);
+        }
+
+        [HttpPost]
+        [Route("category/update/{categoryId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
         [SwaggerOperation(summary: "Update category", description: "Update a title and return a status")]
-        public IActionResult Update([FromBody] CategoryDto categoryDto)
+        public IActionResult Update(int categoryId, CategoryDto categoryDto)
         {
-            bool exists = _categoryRepository.CategoryExists(categoryDto.CategoryId);
-            if(!exists) 
-            {
-                return BadRequest("Action unauthorized - Post doesnt exist");
-            }
-
-            bool IsNotUnique = _categoryRepository.IsUniqueTitle(categoryDto.Title) >= 2;
+            bool IsNotUnique = _categoryRepository.IsUniqueTitle(categoryDto.Title) >= 1;
             if (IsNotUnique)
             {
-                return BadRequest("Title already exists");
+                ModelState.AddModelError("Title", "Category title must be unique");
+                return View(categoryDto);
             }
-
-            var category = _mapper.Map<Category>(categoryDto);
-            if (!_categoryRepository.UpdateCategory(category))
+            var newCategory = new Category()
             {
-                return BadRequest();
+                CategoryId = categoryId,
+                Title = categoryDto.Title
+            };
+
+            if (!_categoryRepository.UpdateCategory(newCategory))
+            {
+                return View("Error");
             }          
 
-            return View("Edit", category);
+            return RedirectToAction("Index", "Home");
         }
 
 
