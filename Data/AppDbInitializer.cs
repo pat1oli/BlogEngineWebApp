@@ -1,5 +1,4 @@
 ﻿using BlogEngineWebApp.Models;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BlogEngineWebApp.Data
 {
@@ -24,10 +23,6 @@ namespace BlogEngineWebApp.Data
                         new Category()
                         {
                             Title = ".Net Core"
-                        },
-                        new Category()
-                        {
-                            Title = "Best Practice"
                         }
                     });
                     context.SaveChanges();
@@ -41,14 +36,14 @@ namespace BlogEngineWebApp.Data
                             Title = "Test Driven Development",
                             Content = "Lorem Ipsum TDD ",
                             PublicationDate = DateTime.Now,
-                            CategoryId = 3
+                            Category= new Category{Title = "Best Practice"}
                         },
                         new Post()
                         {
                             Title = "Organize your room",
                             Content = "Best thing to do for improving and focusing on your goals ",
                             PublicationDate = DateTime.Now,
-                            CategoryId = 1
+                            Category= new Category{Title = "Efficiency"}
                         }
 
                     });
