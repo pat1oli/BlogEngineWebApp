@@ -8,7 +8,6 @@ namespace BlogEngineWebApp.Models
     {
         [Key]
         public int PostId { get; set; }
-        [UniqueTitle]
         [Required]
         public string Title { get; set; }
         [Required]

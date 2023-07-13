@@ -32,9 +32,9 @@ namespace BlogEngineWebApp.Controllers
         [SwaggerOperation(summary: "Add category", description: "Add a new category")]
         public IActionResult Add(CategoryDto categoryDto)
         {
-            if (categoryDto == null)
+            if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return View("NotFound",categoryDto);
             }
 
             bool isNotUnique = _categoryRepository.IsUniqueTitle(categoryDto.Title) > 0;
@@ -75,7 +75,7 @@ namespace BlogEngineWebApp.Controllers
         [SwaggerOperation(summary: "Update category", description: "Update a title and return a status")]
         public IActionResult Update(int categoryId, CategoryDto categoryDto)
         {
-            bool IsNotUnique = _categoryRepository.IsUniqueTitle(categoryDto.Title) >= 1;
+            bool IsNotUnique = _categoryRepository.IsUniqueTitle(categoryDto.Title) > 1;
             if (IsNotUnique)
             {
                 ModelState.AddModelError("Title", "Category title must be unique");
@@ -152,6 +152,7 @@ namespace BlogEngineWebApp.Controllers
 
             if (postsDto == null || postsDto.Count == 0)
             {
+                ModelState.AddModelError("Error", "No Post with this Category!");
                 return NoContent();
             }
                 

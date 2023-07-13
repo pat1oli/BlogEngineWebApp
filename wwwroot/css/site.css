@@ -16,3 +16,13 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.no-underline:link,
+.no-underline:visited {
+    text-decoration: none;
+}
+
+.no-underline:hover,
+.no-underline:focus {
+    text-decoration: underline;
+}

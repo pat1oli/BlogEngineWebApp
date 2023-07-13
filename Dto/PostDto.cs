@@ -7,7 +7,7 @@ namespace BlogEngineWebApp.Dto
     {
         public int PostId { get; set; }
 
-        [Display (Name = "Post title")]
+        [Display(Name = "Post title")]
         [Required(ErrorMessage = "Title is required")]
         public string Title { get; set; }
         [Display(Name = "Post content")]
@@ -16,8 +16,9 @@ namespace BlogEngineWebApp.Dto
         [Display(Name = "Post publication date")]
         [Required(ErrorMessage = "Publication date is required")]
         public DateTime PublicationDate { get; set; }
+
         [Display(Name = "Post category")]
         [Required(ErrorMessage = "Category is required")]
-        public CategoryDto Category { get; set; }
+        public int CategoryId { get; set; }
     }
 }

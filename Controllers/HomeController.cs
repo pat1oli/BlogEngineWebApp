@@ -2,6 +2,7 @@
 using BlogEngineWebApp.Models;
 using BlogEngineWebApp.Repository.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Diagnostics;
 
 namespace BlogEngineWebApp.Controllers
@@ -29,7 +30,7 @@ namespace BlogEngineWebApp.Controllers
             var categoryController = new CategoryController(_categoryRepository, _mapper);
             var categoryViewResult = (ViewResult)categoryController.GetCategories();
 
-            var postController = new PostController(_postRepository, _mapper);
+            var postController = new PostController(_postRepository, _mapper, _categoryRepository);
             var postViewResult = (ViewResult)postController.GetPosts();
 
             var listPost = postViewResult.ViewData.Model;

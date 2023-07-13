@@ -3,32 +3,42 @@ using BlogEngineWebApp.Dto;
 using BlogEngineWebApp.Models;
 using BlogEngineWebApp.Repository.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace BlogEngineWebApp.Controllers
 {
-    [Route("/posts")]
-    [ApiController]
+    [Produces("application/json")]
     public class PostController : Controller
     {
+        private readonly ICategoryRepository _categoryRepository;
         private readonly IPostRepository _postRepository;
         private readonly IMapper _mapper;
 
-        public PostController(IPostRepository postRepository, IMapper mapper)
+        public PostController(IPostRepository postRepository, IMapper mapper, ICategoryRepository categoryRepository)
         {
             _mapper = mapper;
             _postRepository = postRepository;
+            _categoryRepository = categoryRepository;
         }
 
+        [HttpGet]
+        public IActionResult Add()
+        {
+            List<Category> categories = _categoryRepository.GetCategories().ToList();
+            ViewBag.CategoriesEnum = new SelectList(categories, "CategoryId", "Title");
+            return View("Create");
+        }
 
         [HttpPost]
         [ProducesResponseType(typeof(PostDto), 200)]
-        public IActionResult Add([FromBody] PostDto postDto)
+        public IActionResult Add(PostDto postDto)
         {
             if (postDto == null)
             {
-                return BadRequest();
+                return View("NotFound");
             }
-            bool isNotUnique = _postRepository.IsUniqueTitle(postDto.Title)>=1;
+            bool isNotUnique = _postRepository.IsUniqueTitle(postDto.Title) >= 1;
             if (isNotUnique)
             {
                 return BadRequest("Title must be unique");
@@ -36,21 +46,37 @@ namespace BlogEngineWebApp.Controllers
             var post = _mapper.Map<Post>(postDto);
             if (!_postRepository.CreatePost(post))
             {
-                return BadRequest("Internal Server Problem");
+                return BadRequest("Something is missing, surely category");
             }
-            return Ok(postDto);
+            return RedirectToAction("Index", "Home");
         }
-        [HttpPut]
+
+        [HttpGet("/post/update/{postId}")]
+        public IActionResult Update(int postId) {
+            List<Category> categories = _categoryRepository.GetCategories().ToList();
+            ViewBag.CategoriesEnum = new SelectList(categories, "CategoryId", "Title");
+
+            var post = _postRepository.GetPostById(postId);
+            if (post == null)
+            {
+                return View("NotFound");
+            }
+            var postDto = _mapper.Map<PostDto>(post);
+            return View("Edit", postDto);
+
+        }
+
+        [HttpPost("/post/update/{postId}")]
         [ProducesResponseType(typeof(PostDto), 200)]
-        public IActionResult UpdatePost([FromBody] PostDto postDto)
+        public IActionResult Update(int postId, PostDto postDto)
         {
             bool exists = _postRepository.PostExists(postDto.PostId);
             if (!exists)
             {
-                return BadRequest("Post doesn't exist");
+                return View("NotFound");
             }
 
-            bool isTitleUnique = _postRepository.IsUniqueTitle(postDto.Title) >= 1;
+            bool isTitleUnique = _postRepository.IsUniqueTitle(postDto.Title) <= 1;
             if (!isTitleUnique)
             {
                 return BadRequest("Title already exists.");
@@ -62,11 +88,11 @@ namespace BlogEngineWebApp.Controllers
                 return BadRequest();
             }
 
-            return View("Edit", postDto);
+            return RedirectToAction("Index", "Home");
         }
 
 
-        [HttpGet]
+        [HttpGet("/posts")]
         [ProducesResponseType(typeof(IEnumerable<PostDto>), 200)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
@@ -81,17 +107,17 @@ namespace BlogEngineWebApp.Controllers
             return View("Posts", posts);
         }
 
-        [HttpGet("/postId")]
+        [HttpGet("/posts/{postId}")]
         [ProducesResponseType(typeof(PostDto), 200)]
         [ProducesResponseType(404)]
-        public IActionResult GetPostById(int id)
+        public IActionResult GetPostById(int postId)
         {
-            var result = _postRepository.PostExists(id);
+            var result = _postRepository.PostExists(postId);
             if (!result)
             {
                 return NotFound();
             }
-            var post = _mapper.Map<PostDto>(_postRepository.GetPostById(id));
+            var post = _mapper.Map<PostDto>(_postRepository.GetPostById(postId));
 
             return Ok(post);
         }

@@ -18,7 +18,6 @@
 }
 <div>
     <br />
-    <br />
     @*Category List*@
     <div>
         <div class="row">
@@ -41,7 +40,7 @@
                     <ul class="list-group">
                         @foreach (var category in @categories)
                         {
-                            <li class="list-group-item"> <a asp-controller="Category" asp-route-categoryId="@category.CategoryId" asp-action="Update"> @category.Title</a> </li>
+                            <li class="list-group-item"> <a class="no-underline" asp-controller="Category" asp-route-categoryId="@category.CategoryId" asp-action="Update"> @category.Title</a> </li>
                         }
                     </ul>
                 }
@@ -72,7 +71,7 @@
                     <ul class="list-group">
                         @foreach (var post in posts)
                         {
-                            <li class="list-group-item"> <a asp-controller="Post" asp-route-postId="@post.PostId" asp-action="Update">  @post.Title </a> </li>
+                            <li class="list-group-item"> <a class="no-underline" asp-controller="Post" asp-route-postId="@post.PostId" asp-action="Update">  @post.Title </a> </li>
                         }
                     </ul>
                 }
