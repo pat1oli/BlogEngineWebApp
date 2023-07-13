@@ -29,8 +29,8 @@ namespace BlogEngineWebApp.Controllers
         {
             _logger.LogInformation("Loading categories and posts data");
 
-            var categoryResult = _mapper.Map<List<CategoryDto>>(_appDbContext.Categories.ToList());
-            var postResult = _mapper.Map<List<PostDto>>(_appDbContext.Posts.ToList());
+            var categoryResult = _mapper.Map<List<CategoryDto>>(_appDbContext.Categories.OrderBy(c => c.Title).ToList());
+            var postResult = _mapper.Map<List<PostDto>>(_appDbContext.Posts.OrderBy(p => p.Title).ToList());
             
             List<object> data = new List<object>() { categoryResult, postResult};
             return View(data);

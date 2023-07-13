@@ -35,7 +35,7 @@ namespace BlogEngineWebApp.Repository
 
         public ICollection<Post> GetPosts()
         {
-            return _context.Posts.Where(p => p.PublicationDate <= DateTime.Now).OrderByDescending(p => p.PublicationDate).ToList();
+            return _context.Posts.Where(p => p.PublicationDate <= DateTime.Now).OrderBy(p => p.Title).ThenByDescending(p => p.PublicationDate).ToList();
         }
 
         public int IsUniqueTitle(string title)

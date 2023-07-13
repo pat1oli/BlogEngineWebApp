@@ -26,7 +26,7 @@ namespace BlogEngineWebApp.Repository
 
         public ICollection<Category> GetCategories()
         {
-            return _context.Categories.ToList();
+            return _context.Categories.OrderBy(c => c.Title).ToList();
         }
 
         public bool Save()
