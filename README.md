@@ -36,3 +36,5 @@ dotnet restore
 ```
 dotnet run
 ```
+
+<sub>***NB: A swagger is available for the documentation of API***</sub>
